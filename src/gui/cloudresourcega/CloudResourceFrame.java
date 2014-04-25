@@ -284,15 +284,31 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
             if(instanceTypesComboBox.getSelectedIndex() == 6){
                 JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
                 //find all possible solutions and display in table
-                Object[][] data1 = {{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                Object[][] data1 = {
                     {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
                     {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
                     {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}};
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
+                };
                 
+                //scrollPane.removeAll();
+                //scrollPane.add(new JTable(data1, columnNames));
                 DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
-                model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
-                
+                if (model.getRowCount() > 0){
+                    for(int i = model.getRowCount() -1; i>-1; i--){
+                        model.removeRow(i);
+                    }
+                }
+                //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
+                for(int j = 0; j < data1.length; j++){
+                    model.addRow(data1[j]);
+                }
                 
             }
             if(instanceTypesComboBox.getSelectedIndex() == 5){
