@@ -66,12 +66,6 @@ public class CloudInstance extends Problem {
     ram = loadDB("input/memory.txt");
     storage = loadDB("input/storage.txt");
     network = loadDB("input/network.txt");
-    //cpu.put(1,5);
-    //cpu.put(2,1000);
-    //cpu.put(3,7);
-
-    
-
     try {
       if (solutionType.compareTo("Int") == 0)
         solutionType_ = new IntSolutionType(this) ;
@@ -83,7 +77,7 @@ public class CloudInstance extends Problem {
     }
    
   
-  } // TSP
+  } // 
 
   /**
    * Evaluates a solution
@@ -112,14 +106,14 @@ public double calculatePriceFitness(Solution solution){
     //System.out.println(solution.numberOfVariables());
     //System.out.println("var [0] for solution :" + variable[0] +" line number "+ solline);
     //This is the input from users - GP, CO, MO, SO, GPU
-    //double[] weightList = new double[5]; 
-    //weightList[0] = 4;
-    //weightList[1] = 2;
-    //weightList[2] = 3;
-    //weightList[3] = 1;
-    //weightList[4] = 1;
-    double[] weightList = ConfigData.getComputeInstance();
-    System.out.println();
+    double[] weightList = new double[5]; 
+    weightList[0] = 4;
+    weightList[1] = 2;
+    weightList[2] = 3;
+    weightList[3] = 1;
+    weightList[4] = 1;
+    //double[] weightList = ConfigData.getComputeInstance();
+    //System.out.println();
     double[] price = {1,1,1,0,0};
     price[0] = this.cpu.get(Integer.parseInt( variable[0].toString()));
     price[1] = this.gpu.get(Integer.parseInt(variable[1].toString()));

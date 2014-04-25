@@ -15,14 +15,15 @@ import java.util.List;
 public class ConfigData {
     
     private static final List<String> instanceTypeNames = Arrays.asList(new String[]{"Select","Memory Type","Compute Type","GPU Type","Storage Type","General Purpose","Micro Type"});
-    private static final List<Double> INSTANCE_MIN_COSTS = Arrays.asList(new Double[]{700.0,400.0, 300.0, 200.0, 100.0, 0.0});
-    private static final List<Double> INSTANCE_MAX_COSTS = Arrays.asList(new Double[]{1700.0,1400.0, 1300.0, 1200.0, 1100.0, 0.0});
+    private static final List<Double> INSTANCE_MIN_COSTS = Arrays.asList(new Double[]{700.0,800.0, 300.0, 200.0, 100.0, 0.0});
+    private static final List<Double> INSTANCE_MAX_COSTS = Arrays.asList(new Double[]{1700.0,1800.0, 1300.0, 1200.0, 1100.0, 0.0});
       
     private static double[] computeWeight;
     private static double[] gpuWeight;
     private static double[] storageWeight;
     private static double[] generalPurposeWeight;
     private static double[] microWeight;
+    private static double[] memoryWeight;
     
     public static List<String> getInstanceTypeNames(){
         return instanceTypeNames;
@@ -103,6 +104,20 @@ public class ConfigData {
      */
     public static void setStorageWeight(double[] aStorageWeight) {
         storageWeight = aStorageWeight;
+    }
+
+    /**
+     * @return the memoryWeight
+     */
+    public static double[] getMemoryWeight() {
+        return memoryWeight;
+    }
+
+    /**
+     * @param aMemoryWeight the memoryWeight to set
+     */
+    public static void setMemoryWeight(double[] aMemoryWeight) {
+        memoryWeight = aMemoryWeight;
     }
     
 }
