@@ -3,16 +3,12 @@
  * and open the template in the editor.
  */
 package gui.cloudresourcega;
-
-
 import config.cloudresourcega.ConfigData;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,13 +20,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.util.Random;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import jmetal.core.Solution;
+import jmetal.core.SolutionSet;
+import jmetal.core.Variable;
 
 /**
  *
@@ -457,6 +454,7 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
             }
             if(instanceTypesComboBox.getSelectedIndex() == 1){
                 JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
+                //loadSolution(null);
                  Object[][] data1 = {
                     {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
                 };
@@ -490,6 +488,18 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
     @Override
     public void valueChanged(ListSelectionEvent e) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public static void loadSolution(SolutionSet pop){
+        System.out.println("The Population Results::");
+        System.out.println("Population Size::"+pop.size());
+        
+        for(int i = 0; i < pop.size(); i++){
+            Solution s = pop.get(i);
+            Variable[] var = s.getDecisionVariables();
+            System.out.println(var[0]+":"+var[1]+":"+var[2]+":"+var[3]+":"+var[4]);
+        }
+        
     }
     
 }
