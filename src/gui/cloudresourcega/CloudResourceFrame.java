@@ -29,6 +29,8 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.util.Random;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -64,9 +66,11 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
     private JLabel instancePrice;
     private JTextField fitnessText2;
     private JPanel solutionPanel;
-    private JTable myTable;
+    private JTable solutionTable;
     private JScrollPane scrollPane;
     private JLabel priceRangeLabel;
+    
+    private JTextField userInstanceChoice;
             
     public CloudResourceFrame() {
         //Create and set up the window.
@@ -88,20 +92,7 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
         //
         Container contentPane = this.getContentPane();
         contentPane.setLayout(new GridBagLayout());
-        //frame.setLayout(new GridBagLayout());
-        //GridBagConstraints cc = new GridBagConstraints();
-        //cc.anchor = GridBagConstraints.FIRST_LINE_START;
-        //cc.fill = GridBagConstraints.FIRST_LINE_START;
-        //cc.insets = new Insets(0, 0, 0, 0);
-        //cc.gridx = 0;
-        //cc.gridy = 0;
- 
-        //Set up the content pane.
-        //addComponentsToPane(frame.getContentPane());
         runAlgorithmPanel = new JPanel(new GridBagLayout());
-        //runAlgorithmPanel.setToolTipText("RUN");
-        //frame.add(runAlgorithmPanel,cc);
-        //frame.getContentPane().add(runAlgorithmPanel, BorderLayout.WEST);
         GridBagConstraints c = new GridBagConstraints();
         instanceTypeLabel = new JLabel("Instance Type");
         c.gridx = 0;
@@ -175,11 +166,14 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
         
         //solution display
         solutionPanel = new JPanel(new GridBagLayout());
-        myTable = new JTable(data, columnNames);
-        scrollPane = new JScrollPane(myTable);
-        myTable.setVisible(true);
+        solutionTable = new JTable();
+        solutionTable.setModel(new DefaultTableModel(data, columnNames));
+        scrollPane = new JScrollPane(solutionTable);
+        solutionTable.setVisible(true);
         solutionPanel.add(scrollPane);
         
+        userInstanceChoice = new JTextField(30);
+        userInstanceChoice.setEditable(Boolean.FALSE);
         
         
         GridBagConstraints cc = new GridBagConstraints();
@@ -197,6 +191,9 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
         cc.gridy = 1;
         this.add(fitnessPanel,cc);
         
+        cc.gridx = 1;
+        cc.gridy = 0;
+        this.add(userInstanceChoice,cc);
         cc.gridx = 1;
         cc.gridy = 1;
         //cc.gridwidth = 2;
@@ -217,27 +214,27 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
             }           
         }
         if(e.getSource() == instanceTypesComboBox){
-           if (instanceTypesComboBox.getSelectedIndex() == 5){
+           if (instanceTypesComboBox.getSelectedIndex() == 6){
                 priceRangeLabel.setText("Free");
                 //(vCPU,vGPU,RAM,Storage,Network) Micro Instances
                 
+            }
+            if(instanceTypesComboBox.getSelectedIndex() == 5){
+                int index5 = instanceTypesComboBox.getSelectedIndex();
+                priceRangeLabel.setText(Double.toString(ConfigData.getInstanceMinCost(index5 - 1)) + "-"+
+                        Double.toString(ConfigData.getInstanceMaxCost(index5 -1)));
+                //(vCPU,vGPU,RAM,Storage,Network) General Purpose
             }
             if(instanceTypesComboBox.getSelectedIndex() == 4){
                 int index4 = instanceTypesComboBox.getSelectedIndex();
                 priceRangeLabel.setText(Double.toString(ConfigData.getInstanceMinCost(index4 - 1)) + "-"+
                         Double.toString(ConfigData.getInstanceMaxCost(index4 -1)));
-                //(vCPU,vGPU,RAM,Storage,Network) General Purpose
+                //(vCPU,vGPU,RAM,Storage,Network) Storage
             }
             if(instanceTypesComboBox.getSelectedIndex() == 3){
                 int index3 = instanceTypesComboBox.getSelectedIndex();
                 priceRangeLabel.setText(Double.toString(ConfigData.getInstanceMinCost(index3 - 1)) + "-"+
-                        Double.toString(ConfigData.getInstanceMaxCost(index3 -1)));
-                //(vCPU,vGPU,RAM,Storage,Network) Storage
-            }
-            if(instanceTypesComboBox.getSelectedIndex() == 2){
-                int index2 = instanceTypesComboBox.getSelectedIndex();
-                priceRangeLabel.setText(Double.toString(ConfigData.getInstanceMinCost(index2 - 1)) + "-"+
-                        Double.toString(ConfigData.getInstanceMaxCost(index2 - 1)));
+                        Double.toString(ConfigData.getInstanceMaxCost(index3 - 1)));
                 //create GUP weight (vCPU,vGPU,RAM,Storage,Network)
                 Random rand = new Random();
                 double gpuCPU = rand.nextInt(3) + 1;
@@ -250,10 +247,10 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
                 double[] gpuInstance = {gpuCPU,gpuGPU,gpuMemory,gpuStorage,gpuNA};
                 ConfigData.setGpuWeight(gpuInstance);
             }
-            if(instanceTypesComboBox.getSelectedIndex() == 1){
-                int index1 = instanceTypesComboBox.getSelectedIndex();
-                priceRangeLabel.setText(Double.toString(ConfigData.getInstanceMinCost(index1 - 1)) + "-"+
-                        Double.toString(ConfigData.getInstanceMaxCost(index1 - 1)));
+            if(instanceTypesComboBox.getSelectedIndex() == 2){
+                int index2 = instanceTypesComboBox.getSelectedIndex();
+                priceRangeLabel.setText(Double.toString(ConfigData.getInstanceMinCost(index2 - 1)) + "-"+
+                        Double.toString(ConfigData.getInstanceMaxCost(index2 - 1)));
                 Random rand = new Random();
                 double computeCPU = rand.nextInt(7) + 1;
                 double computeGPU = rand.nextInt(4) + 1;
@@ -264,7 +261,13 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
                         + "Network:" + computeNA);
                 double[] computeInstance = {computeCPU,computeGPU,computeMemory,computeStorage,computeNA};
                 ConfigData.setComputeInstance(computeInstance);
+                userInstanceChoice.setText("vCPU:"+computeCPU+"  vGPU:"+computeGPU+"   RAM:"+computeMemory+"   Storage:"+computeStorage
+                        +"   vNIC:"+computeNA);
                 //create compute weight list (vCPU,vGPU,RAM,Storage,Network)
+            }
+            if(instanceTypesComboBox.getSelectedIndex() == 1){
+               priceRangeLabel.setText(Double.toString(ConfigData.getInstanceMinCost(instanceTypesComboBox.getSelectedIndex() - 1)) + "-"+
+                        Double.toString(ConfigData.getInstanceMaxCost(instanceTypesComboBox.getSelectedIndex() - 1))); 
             }
             if(instanceTypesComboBox.getSelectedIndex() == 0){
                 priceRangeLabel.setText("");
@@ -278,29 +281,42 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
             
         }
         if(e.getSource() == searchSolutionButton){
-            if(instanceTypesComboBox.getSelectedIndex() == 5){
-                JOptionPane.showMessageDialog(null, "5");
+            if(instanceTypesComboBox.getSelectedIndex() == 6){
+                JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
                 //find all possible solutions and display in table
+                Object[][] data1 = {{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}};
+                
+                DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
+                model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
+                
+                
+            }
+            if(instanceTypesComboBox.getSelectedIndex() == 5){
+                //find all possible solutions and display in table
+                JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
             }
             if(instanceTypesComboBox.getSelectedIndex() == 4){
                 //find all possible solutions and display in table
-                JOptionPane.showMessageDialog(null, "4");
+               JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex()); 
             }
             if(instanceTypesComboBox.getSelectedIndex() == 3){
                 //find all possible solutions and display in table
-               JOptionPane.showMessageDialog(null, "3"); 
+                JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
             }
             if(instanceTypesComboBox.getSelectedIndex() == 2){
-                //find all possible solutions and display in table
-                JOptionPane.showMessageDialog(null, "2");
-            }
-            if(instanceTypesComboBox.getSelectedIndex() == 1){
                 //find all possible solutions and display in table
                 for(double dd: ConfigData.getComputeInstance()){
                 System.out.println(":::"+dd);
             }
             //JOptionPane.showMessageDialog(null, "Find GA Solution");
-            JOptionPane.showMessageDialog(null, "1");
+            JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
+            }
+            if(instanceTypesComboBox.getSelectedIndex() == 1){
+                JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
             }
           //create instance type randomlly from range of each alliels
         }

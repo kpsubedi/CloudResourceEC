@@ -42,9 +42,6 @@ public class CloudInstance extends Problem {
     private HashMap <Integer , Double> ram ;
     private HashMap <Integer , Double> storage ;
     private HashMap <Integer , Double> network ;
-
- 
-
   /**
    * Creates a new TSP problem instance. It accepts data files from TSPLIB
    * @param filename The file containing the definition of the problem
@@ -122,7 +119,6 @@ public double calculatePriceFitness(Solution solution){
     //weightList[3] = 1;
     //weightList[4] = 1;
     double[] weightList = ConfigData.getComputeInstance();
-    
     System.out.println();
     double[] price = {1,1,1,0,0};
     price[0] = this.cpu.get(Integer.parseInt( variable[0].toString()));
