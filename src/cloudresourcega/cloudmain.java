@@ -27,11 +27,9 @@ import jmetal.operators.crossover.CrossoverFactory;
 import jmetal.operators.mutation.MutationFactory;
 import jmetal.operators.selection.SelectionFactory;
 import jmetal.problems.ProblemFactory;
-import jmetal.problems.ZDT.ZDT3;
 import jmetal.qualityIndicator.QualityIndicator;
 import jmetal.util.Configuration;
 import jmetal.util.JMException;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.FileHandler;
@@ -52,6 +50,10 @@ import jmetal.metaheuristics.nsgaII.NSGAII;
 public class cloudmain {
   public static Logger      logger_ ;      // Logger object
   public static FileHandler fileHandler_ ; // FileHandler object
+  double [] inst ;
+  public cloudmain (double [] ins){
+      inst = ins;
+  }
 
   /**
    * @param args Command line arguments.
@@ -68,6 +70,12 @@ public class cloudmain {
                                   SecurityException, 
                                   IOException, 
                                   ClassNotFoundException {
+      
+      //runAlgorithm(args);
+  
+  }
+      
+  public  void runAlgorithm() throws JMException, SecurityException, IOException, ClassNotFoundException{
     Problem   problem   ; // The problem to solve
     Algorithm algorithm ; // The algorithm to use
     Operator  crossover ; // Crossover operator
@@ -84,30 +92,19 @@ public class cloudmain {
     logger_.addHandler(fileHandler_) ;
         
     indicators = null ;
-    if (args.length == 1) {
-      Object [] params = {"Real"};
-      problem = (new ProblemFactory()).getProblem(args[0],params);
-    } // if
-    else if (args.length == 2) {
-      Object [] params = {"Real"};
-      problem = (new ProblemFactory()).getProblem(args[0],params);
-      indicators = new QualityIndicator(problem, args[1]) ;
-    } // if
-    else { // Default problem
-      //problem = new Kursawe("Real", 3);
-      //problem = new Kursawe("BinaryReal", 3);
-      //problem = new Water("Real");
+  
+      
       double [] upper = new double [5]; //resource pools
       upper[0] = 10;
       upper[1] = 10;
       upper[2] = 20;
       upper[3] = 50;
       upper[4] = 10;
-      problem = new CloudInstance("Int", 5,upper);
+      problem = new CloudInstance("Int", 5, upper, inst);
       //problem = new ConstrEx("Real");
       //problem = new DTLZ1("Real");
       //problem = new OKA2("Real") ;
-    } // else
+   
     
     algorithm = new NSGAII(problem);
     //algorithm = new ssNSGAII(problem);
@@ -148,9 +145,9 @@ public class cloudmain {
     // Result messages 
     logger_.info("Total execution time: "+estimatedTime + "ms");
     logger_.info("Variables values have been writen to file VAR");
-    population.printVariablesToFile("VAR");    
+    population.printFeasibleVAR("VAR");    
     logger_.info("Objectives values have been writen to file FUN");
-    population.printObjectivesToFile("FUN");
+    population.printFeasibleFUN("FUN");
   
     if (indicators != null) {
       logger_.info("Quality indicators") ;

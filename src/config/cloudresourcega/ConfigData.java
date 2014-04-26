@@ -25,6 +25,8 @@ public class ConfigData {
     private static double[] microWeight;
     private static double[] memoryWeight;
     
+    private static int instanceType;
+    
     public static List<String> getInstanceTypeNames(){
         return instanceTypeNames;
     }
@@ -118,6 +120,20 @@ public class ConfigData {
      */
     public static void setMemoryWeight(double[] aMemoryWeight) {
         memoryWeight = aMemoryWeight;
+    }
+
+    /**
+     * @return the instanceType
+     */
+    public static int getInstanceType() {
+        return instanceType;
+    }
+
+    /**
+     * @param instanceType the instanceType to set
+     */
+    public static void setInstanceType(int instanceType) {
+        instanceType = instanceType;
     }
     
 }

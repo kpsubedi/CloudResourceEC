@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.cloudresourcega;
+//package gui.cloudresourcega;
 import config.cloudresourcega.ConfigData;
+import config.cloudresourcega.instanceType;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -12,6 +13,7 @@ import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -24,10 +26,14 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
 import jmetal.core.Variable;
+import jmetal.util.JMException;
+
 
 /**
  *
@@ -219,8 +225,8 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
                 double microMemory = 1;
                 double microStorage = 40;
                 double microNA = 1;
-                System.out.println("The vCPU:"+microCPU + "The vGPU:"+microGPU + "RAM:"+microMemory + "Storage:" + microStorage 
-                        + "Network:" + microNA);
+                //System.out.println("The vCPU:"+microCPU + "The vGPU:"+microGPU + "RAM:"+microMemory + "Storage:" + microStorage 
+                //        + "Network:" + microNA);
                 double[] microInstance = {microCPU,microGPU,microMemory,microStorage,microNA};
                 ConfigData.setMicroWeight(microInstance);
                 userInstanceChoice.setText("vCPU:"+microCPU+"  vGPU:"+microGPU+"   RAM:"+microMemory+"   Storage:"+microStorage
@@ -238,8 +244,8 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
                 double generalMemory = rand.nextInt(16) + 4;
                 double generalStorage = rand.nextInt(32) + 4;
                 double generalNA = 1;
-                System.out.println("The vCPU:"+generalCPU + "The vGPU:"+generalGPU + "RAM:"+generalMemory + "Storage:" + generalStorage 
-                        + "Network:" + generalNA);
+                //System.out.println("The vCPU:"+generalCPU + "The vGPU:"+generalGPU + "RAM:"+generalMemory + "Storage:" + generalStorage 
+                //       + "Network:" + generalNA);
                 double[] storageInstance = {generalCPU,generalGPU,generalMemory,generalStorage,generalNA};
                 ConfigData.setGeneralPurposeWeight(storageInstance);
                 userInstanceChoice.setText("vCPU:"+generalCPU+"  vGPU:"+generalGPU+"   RAM:"+generalMemory+"   Storage:"+generalStorage
@@ -256,8 +262,8 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
                 double storageMemory = rand.nextInt(17) + 15;
                 double storageStorage = rand.nextInt(24) + 8;
                 double storageNA = 1;
-                System.out.println("The vCPU:"+storageCPU + "The vGPU:"+storageGPU + "RAM:"+storageMemory + "Storage:" + storageStorage 
-                        + "Network:" + storageNA);
+                //System.out.println("The vCPU:"+storageCPU + "The vGPU:"+storageGPU + "RAM:"+storageMemory + "Storage:" + storageStorage 
+                //        + "Network:" + storageNA);
                 double[] storageInstance = {storageCPU,storageGPU,storageMemory,storageStorage,storageNA};
                 ConfigData.setStorageWeight(storageInstance);
                 userInstanceChoice.setText("vCPU:"+storageCPU+"  vGPU:"+storageGPU+"   RAM:"+storageMemory+"   Storage:"+storageStorage
@@ -274,8 +280,8 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
                 double gpuMemory = rand.nextInt(12) + 4;
                 double gpuStorage = rand.nextInt(24) + 8;
                 double gpuNA = 1;
-                System.out.println("The vCPU:"+gpuCPU + "The vGPU:"+gpuGPU + "RAM:"+gpuMemory + "Storage:" + gpuStorage 
-                        + "Network:" + gpuNA);
+                //System.out.println("The vCPU:"+gpuCPU + "The vGPU:"+gpuGPU + "RAM:"+gpuMemory + "Storage:" + gpuStorage 
+                //        + "Network:" + gpuNA);
                 double[] gpuInstance = {gpuCPU,gpuGPU,gpuMemory,gpuStorage,gpuNA};
                 ConfigData.setGpuWeight(gpuInstance);
                 userInstanceChoice.setText("vCPU:"+gpuCPU+"  vGPU:"+gpuGPU+"   RAM:"+gpuMemory+"   Storage:"+gpuStorage
@@ -291,8 +297,8 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
                 double computeMemory = rand.nextInt(12) + 4;
                 double computeStorage = rand.nextInt(24) + 8;
                 double computeNA = 1;
-                System.out.println("The vCPU:"+computeCPU + "The vGPU:"+computeGPU + "RAM:"+computeMemory + "Storage:" + computeStorage 
-                        + "Network:" + computeNA);
+                //System.out.println("The vCPU:"+computeCPU + "The vGPU:"+computeGPU + "RAM:"+computeMemory + "Storage:" + computeStorage 
+                //        + "Network:" + computeNA);
                 double[] computeInstance = {computeCPU,computeGPU,computeMemory,computeStorage,computeNA};
                 ConfigData.setComputeInstance(computeInstance);
                 userInstanceChoice.setText("vCPU:"+computeCPU+"  vGPU:"+computeGPU+"   RAM:"+computeMemory+"   Storage:"+computeStorage
@@ -309,8 +315,8 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
                double memoryMemory = rand.nextInt(24) + 12;
                double memoryStorage = rand.nextInt(32) + 16;
                double memoryNA = 1;
-               System.out.println("The vCPU:"+memoryCPU + "The vGPU:"+memoryGPU + "RAM:"+memoryMemory + "Storage:" + memoryStorage 
-                        + "Network:" + memoryNA);
+               //System.out.println("The vCPU:"+memoryCPU + "The vGPU:"+memoryGPU + "RAM:"+memoryMemory + "Storage:" + memoryStorage 
+               //         + "Network:" + memoryNA);
                double[] memoryInstance = {memoryCPU,memoryGPU,memoryMemory,memoryStorage,memoryNA};
                 ConfigData.setMemoryWeight(memoryInstance);
                 userInstanceChoice.setText("vCPU:"+memoryCPU+"  vGPU:"+memoryGPU+"   RAM:"+memoryMemory+"   Storage:"+memoryStorage
@@ -328,148 +334,235 @@ public class CloudResourceFrame extends JFrame implements ActionListener, ListSe
             }
             
         }
+        
         if(e.getSource() == searchSolutionButton){
             if(instanceTypesComboBox.getSelectedIndex() == 6){
-                JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
-                //find all possible solutions and display in table
-                Object[][] data6 = {
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
-                };
-                
-                //scrollPane.removeAll();
-                //scrollPane.add(new JTable(data1, columnNames));
-                DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
-                if (model.getRowCount() > 0){
-                    for(int i = model.getRowCount() -1; i>-1; i--){
-                        model.removeRow(i);
+                try {
+                    double []microWeight = ConfigData.getMicroWeight();
+                    cloudmain cm = new cloudmain(microWeight);
+                    cm.runAlgorithm();
+                    JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
+                    //find all possible solutions and display in table
+                    Object[][] data6 = {
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
+                    };
+                    
+                    //scrollPane.removeAll();
+                    //scrollPane.add(new JTable(data1, columnNames));
+                    //ConfigData.setInstanceType(6);
+                    
+                    DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
+                    if (model.getRowCount() > 0){
+                        for(int i = model.getRowCount() -1; i>-1; i--){
+                            model.removeRow(i);
+                        }
                     }
-                }
-                //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
-                for(int j = 0; j < data6.length; j++){
-                    model.addRow(data6[j]);
+                    //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
+                    for(int j = 0; j < data6.length; j++){
+                        model.addRow(data6[j]);
+                    }
+                } catch (JMException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
             }
             if(instanceTypesComboBox.getSelectedIndex() == 5){
-                //find all possible solutions and display in table
-                JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
-                Object[][] data5 = {
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
-                };
-                
-                //scrollPane.removeAll();
-                //scrollPane.add(new JTable(data1, columnNames));
-                DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
-                if (model.getRowCount() > 0){
-                    for(int i = model.getRowCount() -1; i>-1; i--){
-                        model.removeRow(i);
+                try {
+                    //find all possible solutions and display in table
+                    double []generalPurposeWeight = ConfigData.getGeneralPurposeWeight();
+                    cloudmain cm = new cloudmain(generalPurposeWeight);
+                    cm.runAlgorithm();
+                    JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
+                    Object[][] data5 = {
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
+                    };
+                    
+                    //scrollPane.removeAll();
+                    //scrollPane.add(new JTable(data1, columnNames));
+                    //ConfigData.setInstanceType(5);
+                    DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
+                    if (model.getRowCount() > 0){
+                        for(int i = model.getRowCount() -1; i>-1; i--){
+                            model.removeRow(i);
+                        }
                     }
-                }
-                //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
-                for(int j = 0; j < data5.length; j++){
-                    model.addRow(data5[j]);
+                    //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
+                    for(int j = 0; j < data5.length; j++){
+                        model.addRow(data5[j]);
+                    }
+                } catch (JMException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
             }
             if(instanceTypesComboBox.getSelectedIndex() == 4){
-                //find all possible solutions and display in table
-               JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex()); 
-                Object[][] data4 = {
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
-                };
-                
-                //scrollPane.removeAll();
-                //scrollPane.add(new JTable(data1, columnNames));
-                DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
-                if (model.getRowCount() > 0){
-                    for(int i = model.getRowCount() -1; i>-1; i--){
-                        model.removeRow(i);
+                try {
+                    //find all possible solutions and display in table
+                    double []storageWeight = ConfigData.getStorageWeight();
+                    cloudmain cm = new cloudmain(storageWeight);
+                    cm.runAlgorithm();
+                    JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex()); 
+                    Object[][] data4 = {
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
+                    };
+                    
+                    ConfigData.setInstanceType(4);
+                    //scrollPane.removeAll();
+                    //scrollPane.add(new JTable(data1, columnNames));
+                    DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
+                    if (model.getRowCount() > 0){
+                        for(int i = model.getRowCount() -1; i>-1; i--){
+                            model.removeRow(i);
+                        }
                     }
-                }
-                //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
-                for(int j = 0; j < data4.length; j++){
-                    model.addRow(data4[j]);
+                    //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
+                    for(int j = 0; j < data4.length; j++){
+                        model.addRow(data4[j]);
+                    }
+                } catch (JMException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if(instanceTypesComboBox.getSelectedIndex() == 3){
-                //find all possible solutions and display in table
-                JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
-                Object[][] data3 = {
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
-                };
-                
-                //scrollPane.removeAll();
-                //scrollPane.add(new JTable(data1, columnNames));
-                DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
-                if (model.getRowCount() > 0){
-                    for(int i = model.getRowCount() -1; i>-1; i--){
-                        model.removeRow(i);
+                try {
+                    //find all possible solutions and display in table
+                    double[] gpuWeight = ConfigData.getGpuWeight();
+                    cloudmain cm = new cloudmain(gpuWeight);
+                    cm.runAlgorithm();
+                    JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
+                    Object[][] data3 = {
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
+                    };
+                    
+                     ConfigData.setInstanceType(3);
+                    //scrollPane.removeAll();
+                    //scrollPane.add(new JTable(data1, columnNames));
+                    DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
+                    if (model.getRowCount() > 0){
+                        for(int i = model.getRowCount() -1; i>-1; i--){
+                            model.removeRow(i);
+                        }
                     }
-                }
-                //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
-                for(int j = 0; j < data3.length; j++){
-                    model.addRow(data3[j]);
+                    //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
+                    for(int j = 0; j < data3.length; j++){
+                        model.addRow(data3[j]);
+                    }
+                } catch (JMException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if(instanceTypesComboBox.getSelectedIndex() == 2){
-                 //find all possible solutions and display in table
-                 JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
-                 Object[][] data2 = {
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
-                };
-                
-                //scrollPane.removeAll();
-                //scrollPane.add(new JTable(data1, columnNames));
-                DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
-                if (model.getRowCount() > 0){
-                    for(int i = model.getRowCount() -1; i>-1; i--){
-                        model.removeRow(i);
-                    }
+                try {
+                    //find all possible solutions and display in table
+                    double[] computeWeight = ConfigData.getComputeInstance();
+                    cloudmain cm = new cloudmain(computeWeight);
+                    cm.runAlgorithm();
+                    JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
+                    Object[][] data2 = {
+                       {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)},
+                       {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
+                   };
+                   
+                    ConfigData.setInstanceType(2);
+                   //scrollPane.removeAll();
+                   //scrollPane.add(new JTable(data1, columnNames));
+                   DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
+                   if (model.getRowCount() > 0){
+                       for(int i = model.getRowCount() -1; i>-1; i--){
+                           model.removeRow(i);
+                       }
+                   }
+                   //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
+                   for(int j = 0; j < data2.length; j++){
+                       model.addRow(data2[j]);
+                   }
+                   //find all possible solutions and display in table
+                   for(double dd: ConfigData.getComputeInstance()){
+                   System.out.println(":::"+dd);
+               }
+               //JOptionPane.showMessageDialog(null, "Find GA Solution");
+                } catch (JMException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
-                for(int j = 0; j < data2.length; j++){
-                    model.addRow(data2[j]);
-                }
-                //find all possible solutions and display in table
-                for(double dd: ConfigData.getComputeInstance()){
-                System.out.println(":::"+dd);
-            }
-            //JOptionPane.showMessageDialog(null, "Find GA Solution");
            
             }
             if(instanceTypesComboBox.getSelectedIndex() == 1){
-                JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
-                //loadSolution(null);
-                 Object[][] data1 = {
-                    {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
-                };
-                
-                //scrollPane.removeAll();
-                //scrollPane.add(new JTable(data1, columnNames));
-                DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
-                if (model.getRowCount() > 0){
-                    for(int i = model.getRowCount() -1; i>-1; i--){
-                        model.removeRow(i);
+                try {
+                    double[] computeWeight = ConfigData.getMemoryWeight();
+                    cloudmain cm = new cloudmain(computeWeight);
+                    cm.runAlgorithm();
+                    JOptionPane.showMessageDialog(null, instanceTypesComboBox.getSelectedIndex());
+                    //loadSolution(null);
+                     Object[][] data1 = {
+                        {new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)}
+                    };
+                    
+                     //scrollPane.removeAll();
+                    //scrollPane.add(new JTable(data1, columnNames));
+                    DefaultTableModel model = (DefaultTableModel)solutionTable.getModel();
+                    if (model.getRowCount() > 0){
+                        for(int i = model.getRowCount() -1; i>-1; i--){
+                            model.removeRow(i);
+                        }
+                    }
+                    //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
+                    for(int j = 0; j < data1.length; j++){
+                        model.addRow(data1[j]);
                     }
                 }
-                //model.addRow(new Object[]{new Integer(2), new Integer(1),new Integer(4), new Integer(25), new Integer(1)});
-                for(int j = 0; j < data1.length; j++){
-                    model.addRow(data1[j]);
+                //create instance type randomlly from range of each alliels
+                catch (JMException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CloudResourceFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
           //create instance type randomlly from range of each alliels

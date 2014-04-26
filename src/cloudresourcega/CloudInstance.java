@@ -37,16 +37,20 @@ import jmetal.encodings.solutionType.IntSolutionType;
  * Class representing a TSP (Traveling Salesman Problem) problem.
  */
 public class CloudInstance extends Problem {
-    private HashMap <Integer , Double> cpu ; 
-    private HashMap <Integer , Double> gpu ;
-    private HashMap <Integer , Double> ram ;
-    private HashMap <Integer , Double> storage ;
-    private HashMap <Integer , Double> network ;
+    private HashMap <Integer , Double> cpu; 
+    private HashMap <Integer , Double> gpu;
+    private HashMap <Integer , Double> ram;
+    private HashMap <Integer , Double> storage;
+    private HashMap <Integer , Double> network;
+    private double [] instw;
+        
+    
   /**
    * Creates a new TSP problem instance. It accepts data files from TSPLIB
    * @param filename The file containing the definition of the problem
    */
-  public CloudInstance(String solutionType, int attr, double [] uppers) throws FileNotFoundException {
+  public CloudInstance(String solutionType, int attr, double [] uppers, double [] inst) throws FileNotFoundException {
+    instw = inst;
     numberOfVariables_  = attr;
     numberOfObjectives_ = 2;
     numberOfConstraints_= 1;
@@ -87,8 +91,8 @@ public class CloudInstance extends Problem {
     double fitness1;
     double fitness2;
     // calculate the fitness and at the end 
-    
     //System.out.println("Solution:"+solution);
+    
     fitness1 = this.calculatePriceFitness(solution);
     fitness2 = 0.0;
     solution.setObjective(0, -fitness1);// if you want to maximize the fitness use solution.setObjective(0, -fitness)
@@ -96,7 +100,13 @@ public class CloudInstance extends Problem {
   } // evaluate
 
 public void evaluateConstraints(Solution solution) throws JMException {
-    solution.setOverallConstraintViolation(0);
+    if (solution.getDecisionVariables()[2].getValue()<solution.getDecisionVariables()[3].getValue())
+    {
+        solution.setOverallConstraintViolation(0);
+    }else{
+        solution.setOverallConstraintViolation(1);
+    }
+    
 }
 
 public double calculatePriceFitness(Solution solution){
@@ -107,11 +117,13 @@ public double calculatePriceFitness(Solution solution){
     //System.out.println("var [0] for solution :" + variable[0] +" line number "+ solline);
     //This is the input from users - GP, CO, MO, SO, GPU
     double[] weightList = new double[5]; 
-    weightList[0] = 4;
-    weightList[1] = 2;
-    weightList[2] = 3;
-    weightList[3] = 1;
-    weightList[4] = 1;
+    //weightList[0] = 4;
+    //weightList[1] = 2;
+    //weightList[2] = 3;
+    //weightList[3] = 1;
+    //weightList[4] = 1;
+   
+    weightList = instw;   
     //double[] weightList = ConfigData.getComputeInstance();
     //System.out.println();
     double[] price = {1,1,1,0,0};
